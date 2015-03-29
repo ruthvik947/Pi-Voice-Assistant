@@ -19,7 +19,16 @@ int main (int argc, char* argv[])
 	string intent, playlist;
 	findIntent(ifile, intent, playlist);
 
+	//only if intent is stop, leave the app
+	if (intent == "stop") {
+		cout << "Bye!" << endl;
+		return 0;
+	}
+
 	//pass intent and playlist name to the mopidy function
+	callMopidy(intent, playlist);
+
+	return 0;
 
 }
 

@@ -46,5 +46,5 @@ def searchWolfram(query):
     	else:
         	ans = "No answer found"
  
-   		print ans
+   	print ans
 

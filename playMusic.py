@@ -39,8 +39,8 @@ def searchWolfram(query):
 	resp = client.query(query)
 
 	if len(resp.pods) > 0:
-    	ans = ""
-    	pod = resp.pods[1]
+    		ans = ""
+    		pod = resp.pods[1]
     	if pod.text:
         	ans = pod.text
     	else:

@@ -1,6 +1,7 @@
 import requests
 import sys
 import wolframalpha from wolframalpha
+import mpd
 
 #parse all the data from the wit json output
 response = requests.get(sys.argv[1])
@@ -16,7 +17,8 @@ if intent=="play":
 #assuming the second word in the command is the name of the playlist
 	if len(command) > 2:
 		playlist = command[1]
-		play(playlist)
+		playControl = MPDO() 
+		playControl.control(playlist)
 
 	else :
 		print "Error. No playlist name given"
@@ -24,9 +26,9 @@ if intent=="play":
 
 elif intent=="search":
 	searchWolfram(command)
-
-def play(playlist):
-
+	
+def control(playlist):
+	self.play(playlist[0])
 
 #function to take in search query text
 def searchWolfram(query):
@@ -38,6 +40,7 @@ def searchWolfram(query):
 	client = wolframalpha.Client(app_id)
 	resp = client.query(query)
 
+	#if more than one response
 	if len(resp.pods) > 0:
     		ans = ""
     		pod = resp.pods[1]
@@ -47,4 +50,28 @@ def searchWolfram(query):
         	ans = "No answer found"
  
    	print ans
+
+class MPDO(object):
+    def __init__(self):
+        self.server = "localhost"
+        self.port = 6600
+
+        #prepare client
+        self.client = mpd.MPDClient()
+        self.client.timeout = None
+        self.client.idletimeout = None
+        self.client.connect(self.server, self.port)
+
+        #load playlists
+        self.playlists = [x["playlist"] for x in self.client.listplaylists()]
+
+        #define function that takes in playlist name and plays
+        def play(self, playlist_name):
+	        if playlist_name:
+	            self.client.clear()
+	            self.client.load(playlist_name)
+
+	        self.client.play()
+
+
 
